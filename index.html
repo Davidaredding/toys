@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
+  <style>
+	  body{
+		  background:black;
+	  };
+
+  </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@pixi/filter-glow@2.5.0/lib/filter-glow.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@pixi/filter-outline@2.6.0/lib/filter-outline.min.js"></script>
+	
+</head>
+
+<body>
+	<canvas id="view" class="view"></canvas>
+
+
+  <script type="text/javascript">
+	class ButtonIndicator extends PIXI.Graphics{
+		constructor(height,width){
+			super();
+			this.active = false;
+			this.beginFill(0x008123,1);
+			this.drawRect(0,0,height,width);
+			this.endFill();
+			this.alpha=.5;
+			this.interactive = true;
+			this.filters = [
+				new PIXI.filters.OutlineFilter(2, 0x99ff99),
+				//new PIXI.filters.GlowFilter(5, 2, 0, 0x00FF00, .1)
+			]
+			//this.on('mouseover', this.Activate);
+			//this.on('mouseout', this.Deactivate);
+		}
+
+		Activate(){
+			this.alpha = 1;
+			this.active = true;
+		}
+		Deactivate(){
+			this.alpha = .5;
+			this.active = false;
+		}
+	}
+
+	let v = document.getElementById("view");
+	const app = new PIXI.Application({view:v});
+	let boxes = [];
+	let rows = 14;
+	let cols = 12;
+	for(i=0;i<cols;i++)
+	{
+		for(j=0;j<rows;j++){
+			var box = new ButtonIndicator(48,32);
+			box.x = ((48+5) * i) + 20;
+			box.y = ((32+5) * j) + 20;
+			boxes.push(box);
+			app.stage.addChild(box);
+		}
+	}
+	
+	setInterval(function(){
+		var box = boxes[Math.floor(Math.random()*boxes.length)];
+		box.active?box.Deactivate():box.Activate();
+	},1);
+
+	
+
+
+  </script>
+</body>
+</html>
